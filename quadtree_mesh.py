@@ -47,7 +47,6 @@ def geo_stats_in_bbox(df_geo: pd.DataFrame, bbox, geo_cols: List[str]) -> Dict[s
     subset = points_in_bbox(df_geo, bbox)
     if subset.empty:
         return {'n_cells': 0, 'geo_var': 0.0}
-    # compute mean variance across geo columns (ignore NaNs)
     var_per_col = subset[geo_cols].var(ddof=0).replace({np.nan: 0.0})
     mean_var = var_per_col.mean()
     return {'n_cells': len(subset), 'geo_var': float(mean_var)}
@@ -67,9 +66,8 @@ def build_quadtree(df_shf: pd.DataFrame,
     if 'Lon' not in df_geo.columns and 'Longitude' in df_geo.columns:
         df_geo = df_geo.rename(columns={'Longitude': 'Lon', 'Latitude': 'Lat'})
 
-    # determine geo columns used for variance:
-    #   - if geo_cols is None -> all non Lon/Lat columns (original behaviour)
-    #   - else -> only the user-specified target columns (that actually exist)
+    # Variance is measured on: all non Lon/Lat columns when geo_cols is None,
+    # otherwise only the requested columns that exist in df_geo.
     if geo_cols is None:
         geo_cols = [c for c in df_geo.columns if c not in ['Lat', 'Lon']]
     else:
@@ -77,7 +75,7 @@ def build_quadtree(df_shf: pd.DataFrame,
     if not geo_cols:
         raise ValueError('geo_cols is empty after filtering against df_geo columns')
 
-    # spatial bounds: manual bounds take priority, otherwise derive from data
+    # Spatial bounds: explicit bounds win, otherwise derived from both datasets
     if bounds is not None:
         lon_min, lat_min, lon_max, lat_max = bounds
     else:
@@ -88,7 +86,7 @@ def build_quadtree(df_shf: pd.DataFrame,
 
     root = QuadtreeNode(lon_min, lat_min, lon_max, lat_max, depth=0, cell_id='0')
 
-    # baseline global geo variance (computed on the selected columns)
+    # Global baseline variance used as the splitting threshold
     global_geo_var = df_geo[geo_cols].var(ddof=0).replace({np.nan: 0.0}).mean()
     var_thresh = float(global_geo_var * var_factor)
 
@@ -99,14 +97,14 @@ def build_quadtree(df_shf: pd.DataFrame,
     while stack:
         node = stack.pop()
         bbox = node.bbox()
-        # count SHF points inside
         pts = points_in_bbox(df_shf, bbox)
         n_points = len(pts)
-        # geo stats
+        # Geo statistics inside the node
         gstats = geo_stats_in_bbox(df_geo, bbox, geo_cols)
         geo_var = gstats['geo_var']
 
-        # stop conditions
+        # Split if the node is still within the depth/size limits and is either
+        # dense in SHF points or more variable than the global threshold
         w = node.width()
         h = node.height()
         min_dimension = min(w, h)
@@ -146,11 +144,11 @@ def build_quadtree(df_shf: pd.DataFrame,
 
 
 def main():
-    # load datasets (paths matched to the notebook)
+    # Dataset paths, relative to code/
     df_SHF = pd.read_excel('..\\data\\SHF.xls')
     df_GEO = pd.read_excel('..\\output\\merged_all_datasets.xlsx')
 
-    # ensure columns - rename if necessary
+    # Normalize the coordinate column names
     if 'Lon' not in df_SHF.columns:
         if 'Longitude' in df_SHF.columns:
             df_SHF = df_SHF.rename(columns={'Longitude': 'Lon', 'Latitude': 'Lat'})
@@ -163,7 +161,7 @@ def main():
         else:
             raise ValueError('df_GEO must have Lon/Latitude or Longitude/Latitude columns')
 
-    # build quadtree
+    # Build the quadtree mesh
     leaves = build_quadtree(df_SHF, df_GEO,
                             max_depth=8,
                             min_size=0.5,
@@ -171,10 +169,8 @@ def main():
                             var_factor=0.5)
 
     mesh_df = pd.DataFrame(leaves)
-    # sort by depth then id
     mesh_df = mesh_df.sort_values(['depth', 'cell_id']).reset_index(drop=True)
 
-    # save
     out_path = '..\\output\\quadtree_mesh.csv'
     mesh_df.to_csv(out_path, index=False)
     print(f"Saved quadtree mesh to: {out_path}")
