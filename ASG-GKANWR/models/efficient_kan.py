@@ -1,5 +1,16 @@
 # This file code is modified from: https://github.com/Blealtan/efficient-kan
 
+# -----------------------------------------------------------------------------
+# Provenance notice
+# -----------------------------------------------------------------------------
+# This file is an unmodified copy of "models/efficient_kan.py" as distributed
+# in the BSRBF_KAN project (<https://github.com/hoangthangta/BSRBF_KAN>,
+# Copyright (c) 2024 Hoang-Thang Ta). It is redistributed here unchanged.
+# The code originates from <https://github.com/Blealtan/efficient-kan> (MIT);
+# that notice is retained above. BSRBF_KAN's attribution and citation
+# requirements are recorded in ../THIRD_PARTY_LICENSES/THIRD_PARTY_NOTICES.md.
+# -----------------------------------------------------------------------------
+
 import torch
 import torch.nn.functional as F
 import torch.nn as nn

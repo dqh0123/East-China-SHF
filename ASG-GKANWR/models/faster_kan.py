@@ -1,3 +1,14 @@
+# -----------------------------------------------------------------------------
+# Provenance notice
+# -----------------------------------------------------------------------------
+# This file is an unmodified copy of "models/faster_kan.py" as distributed in
+# the BSRBF_KAN project (<https://github.com/hoangthangta/BSRBF_KAN>, Copyright
+# (c) 2024 Hoang-Thang Ta). It is redistributed here unchanged; the upstream
+# distribution carries no separate notice for this file.
+# BSRBF_KAN's attribution and citation requirements are recorded in
+# ../THIRD_PARTY_LICENSES/THIRD_PARTY_NOTICES.md.
+# -----------------------------------------------------------------------------
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F

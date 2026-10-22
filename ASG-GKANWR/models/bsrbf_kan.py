@@ -1,3 +1,39 @@
+# =============================================================================
+# Third-party attribution and license notice
+# -----------------------------------------------------------------------------
+# This file is an UNMODIFIED copy of "models/bsrbf_kan.py" from the
+# BSRBF_KAN project:
+#     https://github.com/hoangthangta/BSRBF_KAN
+#     Combine B-Splines (BS) and Radial Basis Functions (RBF) in
+#     Kolmogorov-Arnold Networks (KANs)
+#     Author: Hoang-Thang Ta
+#
+# Copyright (c) 2024-2026 Hoang-Thang Ta
+#
+# License: the upstream snapshot that this file was copied from is
+# distributed under the MIT License (Copyright (c) 2024 Hoang Thang Ta).
+# The project's current license, whose terms this repository also complies
+# with, is the "ACADEMIC AND NON-COMMERCIAL LICENSE" (Copyright (c) 2026
+# Hoang-Thang Ta): use, copying, modification and distribution are permitted
+# solely for educational, academic-research and other non-commercial research
+# purposes, and commercial use requires prior written permission from the
+# copyright holder. The complete license text is kept in
+# ../THIRD_PARTY_LICENSES/BSRBF_KAN-LICENSE.txt and must accompany any
+# redistribution.
+#
+# No functional changes were made to this file. It is used by ASG-GKANWR as
+# the BSRBF-KAN baseline model. It is not an official version developed or
+# endorsed by Hoang-Thang Ta.
+#
+# If you use this code in academic work, please cite the associated paper:
+#   Ta, H. T. (2025). BSRBF-KAN: A combination of B-splines and Radial Basis
+#   Functions in Kolmogorov-Arnold Networks. In W. Buntine et al. (Eds.),
+#   Information and Communication Technology (pp. 3-15). Springer Nature.
+#   https://doi.org/10.1007/978-981-96-4288-5_1
+#
+# Based on software developed by Hoang-Thang Ta.
+# =============================================================================
+
 import math
 import numpy as np
 import torch

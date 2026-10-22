@@ -12,6 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# -----------------------------------------------------------------------------
+# Provenance notice
+# -----------------------------------------------------------------------------
+# This file is an unmodified copy of "models/fast_kan.py" as distributed in the
+# BSRBF_KAN project (<https://github.com/hoangthangta/BSRBF_KAN>, Copyright
+# (c) 2024 Hoang-Thang Ta). It is redistributed here unchanged and remains
+# governed by the Apache License 2.0 (Copyright 2024 Li, Ziyao) reproduced
+# above; BSRBF_KAN's distribution adds no further restrictions to it.
+# BSRBF_KAN's attribution and citation requirements are recorded in
+# ../THIRD_PARTY_LICENSES/THIRD_PARTY_NOTICES.md.
+# -----------------------------------------------------------------------------
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
